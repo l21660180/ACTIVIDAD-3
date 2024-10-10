@@ -3,112 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-    <title>Validación de Formulario</title>
-    <!-- Título en la pestaña del navegador -->
+    <title>Validación de Formulario</title> <!-- Título en la pestaña del navegador -->
 
-    <!-- le agregue estilos css a la pagina y una caja para que el formulario tuviera forma  -->
     <style>
+        /* Se define un estilo global para el cuerpo */
         body {
-            display: flex; /* Flexbox crea un diseño flexible y centra los elementos */
-            justify-content: center; /* Alinea horizontal el formulario en el centro  */
-            align-items: center; /* Alinea vertical el formulario en el centro */
-            height: 100vh; /* La altura de la ventana del navegador será igual a la altura visible (100%) */
-            margin: 0; /* Quita los márgenes predeterminados del navegador para que el diseño ocupe toda la pantalla */
-            background-color: #d690e1; /* Color de fondo de la página, un color lilita */
+            display: flex; /* Usamos Flexbox para centrar el contenido */
+            justify-content: center; /* Centra el formulario horizontalmente */
+            align-items: center; /* Centra el formulario verticalmente */
+            min-height: 100vh; /* Se asegura de que el contenido ocupe toda la altura de la ventana */
+            margin: 0; /* Elimina los márgenes predeterminados */
+            background-color: #3498db; /* Fondo azul */
+            font-family: 'Arial', sans-serif; /* Fuente de la página */
         }
 
         /* Estilos para la caja del formulario */
         .form-container {
-            border: 1px solid #ccc; /* borde gris claro a la caja */
-            border-radius: 10px; /* Bordes redondeados para la caja */
-            padding: 20px; /* Espacio interno entre el contenido y el borde */
-            background-color: rgb(64, 107, 237); /* Fondo de la caja, un azul fuerte */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra alrededor de la caja */
-            width: 300px; /* un ancho de 300 píxeles para la caja */
+            background-color: white; /* Fondo blanco para el formulario */
+            border-radius: 15px; /* Bordes redondeados */
+            padding: 30px; /* Espacio alrededor del contenido */
+            width: 320px; /* Ancho de la caja del formulario */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
+        }
+
+        /* Estilos para el título del formulario */
+        h1 {
+            text-align: center; /* Centra el texto del título */
+            color: #2c3e50; /* Color oscuro para el título */
+            margin-bottom: 20px; /* Espacio debajo del título */
+        }
+
+        /* Estilos para las etiquetas de los campos */
+        label {
+            font-size: 14px; /* Tamaño de la fuente para las etiquetas */
+            color: #2c3e50; /* Color oscuro para las etiquetas */
+            display: block; /* Hace que las etiquetas ocupen toda la línea */
+            margin-bottom: 8px; /* Espacio entre la etiqueta y el campo */
+        }
+
+        /* Estilos para los campos de texto */
+        input[type="text"],
+        input[type="password"] {
+            width: 100%; /* Los campos ocupan el 100% del ancho de la caja */
+            padding: 12px; /* Espacio interno */
+            border: 1px solid #dcdde1; /* Borde gris claro */
+            border-radius: 8px; /* Bordes redondeados */
+            margin-bottom: 15px; /* Espacio debajo de los campos */
+            font-size: 14px; /* Tamaño de la fuente */
+            color: #2c3e50; /* Color del texto */
+            background-color: #f9f9f9; /* Fondo gris claro */
+            transition: border 0.3s ease; /* Transición suave en el borde */
+        }
+
+        /* Efecto cuando el campo está activo (focus) */
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #2980b9; /* Borde azul oscuro cuando el campo está activo */
+            outline: none; /* Elimina el contorno predeterminado */
         }
 
         /* Estilos para los mensajes de error */
         .error {
-            color: #FF69B4; /* El color rosa para los mensajes de error */
-            display: none; /* Se ocultan los mensajes de error hasta que se ocupe */
+            color: #e74c3c; /* Color rojo brillante para los errores */
+            font-size: 12px; /* Tamaño pequeño del texto */
+            display: none; /* Inicialmente están ocultos */
+            margin-bottom: 15px; /* Espacio debajo del mensaje de error */
         }
 
-        /* Estilo para el título del formulario */
-        h1 {
-            text-align: center; /* Alinea el título en el centro de la caja */
+        /* Estilos para el botón de envío */
+        input[type="submit"] {
+            width: 100%; /* El botón ocupa el 100% del ancho */
+            padding: 12px; /* Espacio interno */
+            background-color: #2980b9; /* Color de fondo azul oscuro */
+            border: none; /* Sin borde */
+            border-radius: 8px; /* Bordes redondeados */
+            color: white; /* Texto blanco */
+            font-size: 16px; /* Tamaño de la fuente */
+            cursor: pointer; /* Cambia el cursor a puntero */
+            transition: background-color 0.3s ease; /* Transición suave en el color de fondo */
+        }
+
+        /* Efecto hover para el botón */
+        input[type="submit"]:hover {
+            background-color: #1f639a; /* Fondo más oscuro al pasar el ratón */
         }
     </style>
 </head>
 <body>
     <div class="form-container">
-        <!-- Esta es la caja que contiene el formulario -->
         <h1>Formulario de Registro</h1>
-        <!-- El título del formulario -->
-
         <form id="registroForm" onsubmit="return validarFormulario()">
-            <!-- El formulario usa el evento "onsubmit" para llamar a la función validarFormulario() antes
-                 de enviarse. Si esta función devuelve "false", el envío se detiene. -->
-
-            <!-- Campo para ingresar el nombre del usuario -->
+            <!-- Campo de nombre -->
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre">
-            <br>
-            <!-- Mensaje de error que se muestra si el campo de nombre está vacío con la etiqueta span-->
             <span id="errorNombre" class="error">¡¡NO PUEDES DEJAR ESPACIOS EN BLANCO!!</span>
-            <br><br>
 
-            <!-- campo extra de la contraseña para que no se viera solito -->
+            <!-- Campo de contraseña -->
             <label for="password">Contraseña:</label>
             <input type="password" id="password" name="password">
-            <br>
-            <!-- Mensaje de error igual que el otro-->
             <span id="errorPassword" class="error">¡¡LA CONTRASEÑA NO PUEDE ESTAR VACÍA!!</span>
-            <br><br>
 
-            <!-- Botón que manda el formulario  -->
+            <!-- Botón de envío -->
             <input type="submit" value="Registrar">
         </form>
     </div>
 
     <script>
-        // Esta función ve si el campo de nombre y contraseña están vacíos al intentar enviar el formulario.
+        // Función de validación del formulario
         function validarFormulario() {
-            // Obtener el valor que el usuario escribió en el campo de texto
-            //variables nombre y contraseña
             let nombre = document.getElementById("nombre").value;
             let password = document.getElementById("password").value;
-            // Obtener los elementos donde se mostrarán los mensajes de error
             let errorNombre = document.getElementById("errorNombre");
             let errorPassword = document.getElementById("errorPassword");
-            // Inicializar las variables de error la de NONAME que pidio
+
             let noname = false;
             let nopassword = false;
 
             // Comprobar si el campo de nombre está vacío
             if (nombre === "") {
-                errorNombre.style.display = "inline"; // Mostrar mensaje de error
-                noname = true; //  hay un error
+                errorNombre.style.display = "block"; // Mostrar mensaje de error
+                noname = true; // Hay un error
             } else {
                 errorNombre.style.display = "none"; // Ocultar mensaje de error
                 noname = false; // No hay error
             }
 
-            // Validar el campo de contraseña
+            // Comprobar si el campo de contraseña está vacío
             if (password === "") {
-                errorPassword.style.display = "inline"; // Mostrar mensaje de error
-                nopassword = true; //  hay un error
+                errorPassword.style.display = "block"; // Mostrar mensaje de error
+                nopassword = true; // Hay un error
             } else {
                 errorPassword.style.display = "none"; // Ocultar mensaje de error
                 nopassword = false; // No hay error
             }
 
-            // Si alguno de los campos está vacío, no se envía
+            // Si hay errores, se impide el envío del formulario
             if (noname || nopassword) {
-                return false; // Detener el envío del formulario
+                return false; // Impedir envío
             }
 
-            return true; // Permitir que el formulario se envíe
+            return true; // Permitir envío
         }
     </script>
 </body>
